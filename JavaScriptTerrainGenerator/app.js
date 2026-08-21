@@ -29,28 +29,27 @@ material.wireframe = true;
 const mesh = new THREE.Mesh(geometry,material);
 
 
-
-
 const vertexArray = mesh.geometry.attributes.position.array;
 
-let x,y,z
+let x,y,z,time;
 let scale = 0.05
 let amplitude = 5
 
 
-for (let index = 0; index < vertexArray.length; index += 3) {
-    x = vertexArray[index];
-    y = vertexArray[index + 1];
-    z = noise2D(x * scale, y * scale) * amplitude
-    vertexArray[index+2] = z;
-}
-mesh.geometry.attributes.position.needsUpdate = true;
-mesh.geometry.computeVertexNormals();
 mesh.rotation.x = -Math.PI / 2;
 
 scene.add(mesh);
 
 function animate() {
+    mesh.geometry.attributes.position.needsUpdate = true;
+    time = (performance.now() * 0.001) * 0.5;
+    for (let index = 0; index < vertexArray.length; index += 3) {
+    x = vertexArray[index];
+    y = vertexArray[index + 1];
+    z = noise2D(x * scale, (y * scale) + time) * amplitude
+    vertexArray[index+2] = z;
+    }
+    mesh.geometry.computeVertexNormals();
     requestAnimationFrame(animate);
     orbitControls.update();
     renderer.render(scene,camera);
