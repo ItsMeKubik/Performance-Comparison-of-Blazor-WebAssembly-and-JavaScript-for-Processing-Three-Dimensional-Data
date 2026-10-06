@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { createNoise2D } from 'simplex-noise';
+import FastNoiseLite  from "fastnoise-lite";
 
 const container = document.getElementById("webgl_container");
 const clock_container = document.getElementById("clock");
@@ -20,7 +20,11 @@ camera.position.set(120,50,105);
 orbitControls.update();
 
 
-const noise2D = createNoise2D();
+const fastNoise = new FastNoiseLite();
+fastNoise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+fastNoise.SetSeed(1337);
+fastNoise.SetFractalType(FastNoiseLite.FractalType.None);
+fastNoise.SetFrequency(1);
 
 const geometry = new THREE.PlaneGeometry(250,250,250,250);
 
@@ -32,7 +36,7 @@ const mesh = new THREE.Mesh(geometry,material);
 
 const vertexArray = mesh.geometry.attributes.position.array;
 
-let x,y,z,time,scale,amplitude,j,i,time_start,time_end;
+let x,y,z,time,scale,amplitude,j,i,time_start,time_end,n;
 let count = 0;
 let time_took = 0;
 
@@ -52,18 +56,19 @@ function animate() {
         y = vertexArray[i + 1];
         z = 0;
         for (j = 0; j < 4; j++) {
-            z += noise2D(x*scale, (y*scale) + time) * amplitude;
+            n = fastNoise.GetNoise(x*scale, (y*scale) + time) * amplitude;
+            z += (n + 1) / 2;
             scale *= 2;
             amplitude /= 2;
         }
-        vertexArray[i+2] = z;
+        vertexArray[i+2] = Math.pow(z,1.5);
     }
     mesh.geometry.computeVertexNormals();
-    requestAnimationFrame(animate);
     time_end = performance.now();
     time_took += time_end - time_start;
     orbitControls.update();
     renderer.render(scene,camera);
+    requestAnimationFrame(animate);
     if (count == 60){
         clock_container.innerHTML = time_took / 60;
         time_took = 0;
