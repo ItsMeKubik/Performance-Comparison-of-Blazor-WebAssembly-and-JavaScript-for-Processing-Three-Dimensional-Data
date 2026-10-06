@@ -29,14 +29,14 @@ fastNoise.SetFrequency(1);
 const geometry = new THREE.PlaneGeometry(250,250,250,250);
 
 
-const light = new THREE.DirectionalLight( {color: 0xffffff} );
+const light = new THREE.DirectionalLight(0xffffff, 1.0 );
 
 const material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
 const mesh = new THREE.Mesh(geometry,material);
 
 const vertexArray = mesh.geometry.attributes.position.array;
 
-let x,y,z,time,scale,amplitude,j,i,time_start,time_end,n;
+let time,time_start,time_end
 let count = 0;
 let time_took = 0;
 
@@ -46,23 +46,27 @@ scene.add(mesh,light);
 
 function animate() {
     count += 1;
-    time_start = performance.now();
-    mesh.geometry.attributes.position.needsUpdate = true;
     time = (performance.now() * 0.001) * 0.5;
-    for (i = 0; i < vertexArray.length; i += 3) {
-        scale = 0.05;
+    time_start = performance.now();
+   
+    for (let i = 0; i < vertexArray.length; i += 3) {
+        let x, y, z, scale, amplitude
+        scale = 0.02;
         amplitude = 4;
         x = vertexArray[i];
         y = vertexArray[i + 1];
         z = 0;
-        for (j = 0; j < 4; j++) {
-            n = fastNoise.GetNoise(x*scale, (y*scale) + time) * amplitude;
-            z += (n + 1) / 2;
+        for (let j = 0; j < 4; j++) {
+            let noiseRaw = fastNoise.GetNoise(x * scale, (y*scale) + time);
+            let ridge = 1.0 - Math.abs(noiseRaw);
+            z += (ridge * ridge) * amplitude
             scale *= 2;
             amplitude /= 2;
         }
-        vertexArray[i+2] = Math.pow(z,1.5);
+        let z_norm = z/7.5;
+        vertexArray[i+2] = Math.pow(z_norm,1.5) * 20;
     }
+    mesh.geometry.attributes.position.needsUpdate = true;
     mesh.geometry.computeVertexNormals();
     time_end = performance.now();
     time_took += time_end - time_start;
