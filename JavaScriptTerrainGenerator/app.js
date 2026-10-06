@@ -44,6 +44,8 @@ mesh.rotation.x = -Math.PI / 2;
 
 scene.add(mesh,light);
 
+
+const BENCHMARK_START_TIME = performance.now();
 function animate() {
     count += 1;
     time = (performance.now() * 0.001) * 0.5;
@@ -72,13 +74,14 @@ function animate() {
     time_took += time_end - time_start;
     orbitControls.update();
     renderer.render(scene,camera);
-    requestAnimationFrame(animate);
-    if (count == 60){
-        clock_container.innerHTML = time_took / 60;
-        time_took = 0;
-        count = 0;
+    let animID = requestAnimationFrame(animate);
+    let elapsed_time = performance.now() - BENCHMARK_START_TIME;
+    if(elapsed_time >= 180000){
+        clock_container.innerHTML = time_took/count
+        cancelAnimationFrame(animID);
+        return;
     }
-    
 }
+
 
 animate();
