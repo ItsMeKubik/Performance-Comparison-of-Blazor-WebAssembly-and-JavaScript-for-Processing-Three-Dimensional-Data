@@ -46,6 +46,7 @@ scene.add(mesh,light);
 
 
 const BENCHMARK_START_TIME = performance.now();
+const TESTING_TIME = 180000;
 function animate() {
     count += 1;
     time = (performance.now() * 0.001) * 0.5;
@@ -76,7 +77,7 @@ function animate() {
     renderer.render(scene,camera);
     let animID = requestAnimationFrame(animate);
     let elapsed_time = performance.now() - BENCHMARK_START_TIME;
-    if(elapsed_time >= 180000){
+    if(elapsed_time >= TESTING_TIME){
         clock_container.innerHTML = time_took/count
         cancelAnimationFrame(animID);
         return;
