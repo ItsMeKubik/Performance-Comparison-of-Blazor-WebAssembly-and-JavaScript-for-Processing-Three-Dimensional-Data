@@ -16,14 +16,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D object generator</title>
 </head>
+<style>
+    body {
+        display: flex;
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #fff;
+        color: black;
+    }
+    
+    #controls {
+        width: 300px;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #webgl_container {
+        flex-grow: 1;
+        position: relative;
+    }
+</style>
 <body>
-    <div id="clock">
-        
+    <div id="controls">
+        <select id="gridSize">
+            <option value="100">100x100</option>
+            <option value="250" selected>250x250</option>
+            <option value="500">500x500</option>
+        </select>
+        <span id="vertexCount">Vertices: 63001</span>
+        <button id="startBtn">Start Rendering</button>
+        <div id="clock">Time: 00:00</div>
     </div>
-    <div id="webgl_container">
-
-
-    </div>
+    
+    <div id="webgl_container"></div>
+    
     <script type="module" src="app.js"></script>
 </body>
 </html>
