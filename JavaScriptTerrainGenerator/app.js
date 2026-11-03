@@ -27,7 +27,7 @@ orbitControls.update();
 
 const fastNoise = new FastNoiseLite();
 fastNoise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
-fastNoise.SetSeed(1337);
+fastNoise.SetSeed(2026);
 fastNoise.SetFractalType(FastNoiseLite.FractalType.None);
 fastNoise.SetFrequency(1);
 

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--  Licensed to the .NET Foundation under one or more agreements. -->
+<!-- The .NET Foundation licenses this file to you under the MIT license. -->
+<html>
+
+<head>
+  <title>TerrainBenchmarkWasm</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" id="webassembly" />
+  <script type="importmap">
+        {
+            "imports":
+            {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+                "simplex-noise": "https://esm.sh/simplex-noise@4.0.1",
+                "fastnoise-lite": "https://cdn.jsdelivr.net/npm/fastnoise-lite/FastNoiseLite.js"
+            }
+        }
+    </script>
+  <script type='module' src="main#[.{fingerprint}].js"></script>
+  
+</head>
+
+<style>
+    body {
+        display: flex;
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+        background-color: #fff;
+        color: black;
+    }
+    
+    #controls {
+        width: 300px;
+        padding: 20px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #webgl_container {
+        flex-grow: 1;
+        position: relative;
+    }
+</style>
+<body>
+    <div id="controls">
+        <select id="gridSize">
+            <option value="100">100x100</option>
+            <option value="250" selected>250x250</option>
+            <option value="500">500x500</option>
+        </select>
+        <span id="vertexCount">Vertices: 63001</span>
+        <button id="startBtn">Start Rendering</button>
+        <div id="clock">Time: 00:00</div>
+    </div>
+    
+    <div id="webgl_container"></div>
+
+</body>
+
+</html>
