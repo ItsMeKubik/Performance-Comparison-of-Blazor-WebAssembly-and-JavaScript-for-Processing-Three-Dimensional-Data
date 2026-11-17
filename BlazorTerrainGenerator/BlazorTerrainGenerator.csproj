@@ -16,4 +16,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.13" PrivateAssets="all" />
   </ItemGroup>
 
+  <Target Name="EnsureDotnetJsAlias" AfterTargets="Publish">
+    <ItemGroup>
+        <_DotnetJs Include="$(PublishDir)wwwroot/_framework/dotnet.*.js"
+            Exclude="$(PublishDir)wwwroot/_framework/dotnet.native.*.js;$(PublishDir)wwwroot/_framework/dotnet.runtime.*.js" />
+    </ItemGroup>
+
+    <Copy
+        SourceFiles="@(_DotnetJs)"
+        DestinationFiles="$(PublishDir)wwwroot/_framework/dotnet.js"
+        SkipUnchangedFiles="true" />
+  </Target>
+
 </Project>
