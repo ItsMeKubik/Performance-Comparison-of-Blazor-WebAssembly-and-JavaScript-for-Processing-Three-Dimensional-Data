@@ -1,0 +1,38 @@
+﻿@page "/"
+@inject IJSRuntime JS
+
+<div id="controls">
+    <div>Průměrný čas výpočtu je: @resultTime ms</div>
+    <select @bind="gridSize">
+        <option value="100">100x100</option>
+        <option value="250">250x250</option>
+        <option value="500">500x500</option>
+    </select>
+    <button @onclick=RunBenchmark>START</button>
+</div>
+<div id="webgl_container"></div>
+
+@code{
+    private int gridSize = 250;
+    private double? resultTime;
+
+    private IJSObjectReference? jsModule;
+    protected async Task RunBenchmark()
+    {
+        if(jsModule is not null)
+        {
+            resultTime = await jsModule.InvokeAsync<double>("startBenchmark",gridSize);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            jsModule = await JS.InvokeAsync<IJSObjectReference>("import","./main.js");
+            await jsModule.InvokeVoidAsync("initThreeJSEngine");
+        }
+    }
+
+
+}

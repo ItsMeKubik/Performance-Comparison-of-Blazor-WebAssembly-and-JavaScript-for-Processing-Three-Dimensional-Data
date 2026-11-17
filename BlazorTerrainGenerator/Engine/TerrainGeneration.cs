@@ -1,12 +1,6 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.JavaScript;
-using System.Threading.Tasks;
-
-Console.WriteLine("Hello, Browser!");
-
 partial class TerrainGenerator
 {
     static float[] buffer;
